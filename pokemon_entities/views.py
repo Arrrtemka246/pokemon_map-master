@@ -84,6 +84,24 @@ def show_pokemon(request, pokemon_id):
     else:
         image_url = DEFAULT_IMAGE_URL
 
+    previous_evolution = None
+
+    if requested_pokemon.previous_evolution:
+        previous_pokemon = requested_pokemon.previous_evolution
+
+        if previous_pokemon.image:
+            previous_image_url = request.build_absolute_uri(
+                previous_pokemon.image.url
+            )
+        else:
+            previous_image_url = DEFAULT_IMAGE_URL
+
+        previous_evolution = {
+            'pokemon_id': previous_pokemon.id,
+            'title_ru': previous_pokemon.title,
+            'img_url': previous_image_url,
+        }
+
     current_time = localtime()
 
     pokemon_entities = PokemonEntity.objects.filter(
@@ -110,6 +128,7 @@ def show_pokemon(request, pokemon_id):
         'title_jp': requested_pokemon.title_jp,
         'description': requested_pokemon.description,
         'img_url': image_url,
+        'previous_evolution': previous_evolution,
     }
 
     return render(request, 'pokemon.html', context={

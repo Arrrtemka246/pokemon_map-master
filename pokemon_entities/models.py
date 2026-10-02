@@ -9,6 +9,8 @@ class Pokemon(models.Model):
         blank=True,
     )
     description = models.TextField()
+    title_en = models.CharField(max_length=200)
+    title_jp = models.CharField(max_length=200)
 
     def __str__(self):
         return self.title
